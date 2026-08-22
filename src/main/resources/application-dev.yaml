@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tensaicms
+    username: cms_user
+    password: cms_password
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+    open-in-view: false
+
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
