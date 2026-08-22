@@ -1,3 +1,6 @@
 spring:
   application:
     name: tensai-cms-api
+
+  profiles:
+    active: dev

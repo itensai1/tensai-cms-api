@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: tensai-cms-db
+    environment:
+      POSTGRES_DB: tensaicms
+      POSTGRES_USER: cms_user
+      POSTGRES_PASSWORD: cms_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/pgsql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
