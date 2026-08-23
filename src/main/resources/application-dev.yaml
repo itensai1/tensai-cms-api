@@ -17,3 +17,7 @@ spring:
 logging:
   level:
     org.hibernate.SQL: DEBUG
+
+security:
+  allowed-origins: [ "*" ]
+  telegram-header: "X-Internal-Secret"
