@@ -27,8 +27,8 @@ security:
 
 storage:
   s3:
-    endpoint: http://localhost:9000 # Remove or leave empty for real AWS S3
-    access-key: minioadmin
-    secret-key: minioadmin
-    region: us-east-1 # MinIO defaults to us-east-1
-    bucket: cms-media-bucket
+    endpoint: "http://localhost:9000"
+    access-key: "cms_user"
+    secret-key: "cms_password"
+    region: "us-east-1" # MinIO defaults to us-east-1
+    bucket: "cms-media-bucket"
