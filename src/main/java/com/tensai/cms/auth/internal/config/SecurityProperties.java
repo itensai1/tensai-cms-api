@@ -11,6 +11,10 @@ public record SecurityProperties(
 
         String telegramHeader,
 
-        String jwtSecret
+        String jwtSecret,
+
+        String baseUrl,
+
+        String resetPasswordPath
 ) {
 }
