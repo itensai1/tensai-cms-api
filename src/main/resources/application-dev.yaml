@@ -21,3 +21,4 @@ logging:
 security:
   allowed-origins: [ "*" ]
   telegram-header: "X-Internal-Secret"
+  jwt-secret: ${JWT_SECRET}

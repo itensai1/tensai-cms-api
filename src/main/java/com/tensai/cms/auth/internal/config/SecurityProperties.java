@@ -5,10 +5,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.List;
 
 @ConfigurationProperties(prefix = "security")
-public record SecurityProperties (
+public record SecurityProperties(
 
-    List<String> allowedOrigins,
+        List<String> allowedOrigins,
 
-    String telegramHeader
+        String telegramHeader,
 
-) {}
+        String jwtSecret
+) {
+}
