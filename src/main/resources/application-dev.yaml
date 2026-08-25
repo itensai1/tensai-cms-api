@@ -31,3 +31,11 @@ storage:
     secret-key: "cms_password"
     region: "us-east-1" # MinIO defaults to us-east-1
     bucket: "cms-media-bucket"
+
+telegram:
+  header: "X-Internal-Secret"
+  secret: ${TELEGRAM_GATEWAY_API_SECRET}
+  url: ${TELEGRAM_GATEWAY_API_URL}
+  endpoints:
+    post-command: "/internal/command"
+    get-file: "/internal/file"
