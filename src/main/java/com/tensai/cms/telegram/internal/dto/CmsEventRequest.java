@@ -1,4 +1,4 @@
-package com.tensai.cms.telegram.internal.web.dto;
+package com.tensai.cms.telegram.internal.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tensai.cms.telegram.api.events.*;

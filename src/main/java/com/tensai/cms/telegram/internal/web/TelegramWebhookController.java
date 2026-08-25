@@ -1,7 +1,7 @@
 package com.tensai.cms.telegram.internal.web;
 
 import com.tensai.cms.telegram.internal.service.TelegramWebhookService;
-import com.tensai.cms.telegram.internal.web.dto.CmsEventRequest;
+import com.tensai.cms.telegram.internal.dto.CmsEventRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

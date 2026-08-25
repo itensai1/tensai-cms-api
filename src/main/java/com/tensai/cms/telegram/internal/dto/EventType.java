@@ -1,4 +1,4 @@
-package com.tensai.cms.telegram.internal.web.dto;
+package com.tensai.cms.telegram.internal.dto;
 
 public enum EventType {
     REGISTER_USER,

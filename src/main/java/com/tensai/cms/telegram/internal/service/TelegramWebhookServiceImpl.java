@@ -1,6 +1,6 @@
 package com.tensai.cms.telegram.internal.service;
 
-import com.tensai.cms.telegram.internal.web.dto.CmsEventRequest;
+import com.tensai.cms.telegram.internal.dto.CmsEventRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
