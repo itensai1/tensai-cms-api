@@ -73,7 +73,7 @@ public class SecurityConfig {
                 "Accept",
                 "X-Requested-With",
                 "X-Request-ID",
-                properties.telegramHeader()
+                "X-Internal-Secret" // telegram gateway header
         ));
 
         configuration.setExposedHeaders(List.of(

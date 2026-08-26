@@ -6,6 +6,7 @@ import com.tensai.cms.storage.internal.config.StorageProperties;
 import com.tensai.cms.storage.internal.web.dto.FileDownloadInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,6 +43,29 @@ public class StorageServiceImpl implements StorageService {
 
         s3Client.putObject(putObjectRequest,
                 RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+
+        return uniqueKey;
+    }
+
+    @Override
+    public String store(Resource file, String contentType) throws IOException {
+        String filename = file.getFilename();
+
+        String extension = (filename != null && filename.contains(".")) ?
+                filename.substring(filename.lastIndexOf("."))
+                : "." + contentType.substring(contentType.lastIndexOf("/") + 1);
+
+        String uniqueKey = UUID.randomUUID() + extension;
+
+        // Upload to MinIO/S3
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(properties.bucket())
+                .key(uniqueKey)
+                .contentType(contentType)
+                .build();
+
+        s3Client.putObject(putObjectRequest,
+                RequestBody.fromInputStream(file.getInputStream(), file.contentLength()));
 
         return uniqueKey;
     }

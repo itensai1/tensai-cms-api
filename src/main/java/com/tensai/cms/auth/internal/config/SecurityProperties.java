@@ -9,8 +9,6 @@ public record SecurityProperties(
 
         List<String> allowedOrigins,
 
-        String telegramHeader,
-
         String jwtSecret,
 
         String baseUrl,

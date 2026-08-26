@@ -7,8 +7,14 @@ spring:
 
   flyway:
     enabled: true
+    baseline-on-migrate: true # Safely initializes Flyway if the DB already has existing tables
 
   servlet:
     multipart:
       max-file-size: 50MB
       max-request-size: 100MB
+
+  modulith:
+    events:
+      completion-mode: update
+      republish-outstanding-events-on-restart: true
