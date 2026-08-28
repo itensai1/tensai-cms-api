@@ -13,7 +13,9 @@ public record TelegramFile(
         Long fileSize,
 
         @JsonProperty("mime_type")
-        String mimeType
+        String mimeType,
+
+        String type
 
 ) {
 }

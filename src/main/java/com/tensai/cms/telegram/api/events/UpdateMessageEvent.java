@@ -23,17 +23,7 @@ public record UpdateMessageEvent(
 
         String text,
 
-        String caption,
-
-        TelegramFile video,
-
-        TelegramFile audio,
-
-        TelegramFile voice,
-
-        TelegramFile document,
-
-        List<TelegramFile> photo,
+        TelegramFile media,
 
         List<MessageEntity> entities,
 
