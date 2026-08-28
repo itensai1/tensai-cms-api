@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
-import java.util.List;
-
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record SendMessageCommand(
@@ -22,7 +20,7 @@ public record SendMessageCommand(
         Integer replyToMessageId,
 
         @JsonProperty("message_thread_id")
-        Integer messageThreadId,
+        Long messageThreadId,
 
         Keyboard keyboard
 ) {
