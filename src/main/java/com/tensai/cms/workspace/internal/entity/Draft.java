@@ -81,4 +81,14 @@ public class Draft {
         blocks.remove(block);
         block.setDraft(null);
     }
+
+    public void removeBlockWithPosition(int position) {
+        blocks.stream()
+                .filter(b -> b.getPosition() == position)
+                .findFirst()
+                .ifPresent(block -> {
+                    blocks.remove(block);
+                    block.setDraft(null);
+                });
+    }
 }
