@@ -19,4 +19,5 @@ public interface DraftService {
 
     void deleteDraftSummary(Long telegramGroupId, Long topicId);
 
+    void publishDraft(Long telegramGroupId, Long topicId);
 }

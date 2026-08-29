@@ -5,10 +5,9 @@ import com.tensai.cms.shared.exception.CustomException;
 import com.tensai.cms.storage.api.StorageService;
 import com.tensai.cms.telegram.api.TelegramService;
 import com.tensai.cms.telegram.api.events.TelegramFile;
-import com.tensai.cms.workspace.internal.entity.BlockType;
-import com.tensai.cms.workspace.internal.entity.Draft;
-import com.tensai.cms.workspace.internal.entity.DraftBlock;
-import com.tensai.cms.workspace.internal.repository.DraftBlockRepo;
+import com.tensai.cms.workspace.internal.entity.*;
+import com.tensai.cms.workspace.internal.repository.BlogBlockRepo;
+import com.tensai.cms.workspace.internal.repository.BlogRepo;
 import com.tensai.cms.workspace.internal.repository.DraftRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -27,6 +26,8 @@ public class DraftServiceImpl implements DraftService {
     private final UserQueryService userQueryService;
     private final StorageService storageService;
     private final TelegramService telegramService;
+    private final BlogRepo blogRepo;
+    private final BlogBlockRepo blogBlockRepo;
 
     @Override
     @Transactional
@@ -137,6 +138,50 @@ public class DraftServiceImpl implements DraftService {
     @Transactional
     public void deleteDraftSummary(Long telegramGroupId, Long topicId) {
         updateDraftSummary(telegramGroupId, topicId, null);
+    }
+
+    @Override
+    @Transactional
+    public void publishDraft(Long telegramGroupId, Long topicId) {
+        UUID userId = userQueryService.getUserIdByTelegramGroupId(telegramGroupId);
+
+        if (draftRepo.existsByUserIdAndTelegramTopicIdAndSyncedTrue(userId, topicId)) return;
+
+        Draft draft = draftRepo.findByUserIdAndTelegramTopicId(userId, topicId)
+                .orElseThrow(() -> new CustomException(404, "No draft found with userId: %s and topicId: %s "
+                        .formatted(userId, topicId)));
+
+
+        Blog blog = draft.getBlog();
+        if (blog == null) { // new blog
+            blog = new Blog(userId, draft.getTitle(), draft.getSummary());
+            blogRepo.save(blog);
+            draft.setBlog(blog);
+        } else { // old blog
+            blog.setTitle(draft.getTitle());
+            blog.setSummary(draft.getSummary());
+        }
+
+        // delete old BlogBlocks
+        blogBlockRepo.deleteAllByBlogId(blog.getId());
+        blog.getBlocks().clear();
+
+        // copy dtaft blocks to blog
+        for (DraftBlock block : draft.getBlocks()) {
+            blog.addBlock(
+                    new BlogBlock(
+                            blog,
+                            block.getPosition(),
+                            block.getType(),
+                            block.getText(),
+                            block.getMediaUrl()
+                    )
+            );
+        }
+
+        draft.setSynced(true);
+        blogRepo.save(blog);
+        draftRepo.save(draft);
     }
 
     private String getResourceMimeType(Resource resource) {

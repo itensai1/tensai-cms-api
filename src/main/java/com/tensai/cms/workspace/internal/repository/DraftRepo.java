@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface DraftRepo extends JpaRepository<Draft, UUID> {
     Optional<Draft> findByUserIdAndTelegramTopicId(UUID userId, Long telegramTopicId);
+
+    boolean existsByUserIdAndTelegramTopicIdAndSyncedTrue(UUID userId, Long telegramTopicId);
 }
