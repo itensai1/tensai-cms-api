@@ -1,5 +1,6 @@
 package com.tensai.cms.auth.internal.service;
 
+import com.tensai.cms.auth.api.UserInfo;
 import com.tensai.cms.auth.api.UserQueryService;
 import com.tensai.cms.auth.internal.config.SecurityProperties;
 import com.tensai.cms.auth.internal.entity.TokenPurpose;
@@ -15,7 +16,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -76,5 +80,14 @@ public class AuthServiceImpl implements AuthService, UserQueryService {
     @Override
     public UUID getUserIdByTelegramGroupId(Long telegramGroupId) {
         return userRepo.findIdByTelegramGroupId(telegramGroupId);
+    }
+
+    @Override
+    public Map<UUID, UserInfo> getUserInfoByIds(Set<UUID> userIds) {
+        if (userIds == null) return Map.of();
+        return userRepo.findAllByIdIn(userIds).stream()
+                .collect(Collectors.toMap(u -> u.getId(),
+                        u -> new UserInfo(u.getUsername(), u.getFirstName() + (u.getLastName() != null ? " " + u.getLastName() : "")))
+                );
     }
 }
