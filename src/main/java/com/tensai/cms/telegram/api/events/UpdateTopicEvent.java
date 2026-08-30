@@ -11,7 +11,7 @@ public record UpdateTopicEvent(
         Long chatId,
 
         @JsonProperty("message_thread_id")
-        Integer messageThreadId,
+        Long messageThreadId,
 
         @JsonProperty("topic_name")
         String topicName

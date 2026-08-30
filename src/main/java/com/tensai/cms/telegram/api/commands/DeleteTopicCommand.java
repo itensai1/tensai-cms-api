@@ -15,6 +15,6 @@ public record DeleteTopicCommand(
 
         @NotNull(message = "required")
         @JsonProperty("message_thread_id")
-        Integer messageThreadId
+        Long messageThreadId
 ) {
 }

@@ -14,7 +14,7 @@ public record CreateMessageEvent(
         Long chatId,
 
         @JsonProperty("message_thread_id")
-        Integer messageThreadId,
+        Long messageThreadId,
 
         @JsonProperty("message_id")
         Integer messageId,
@@ -23,15 +23,7 @@ public record CreateMessageEvent(
 
         String text,
 
-        String caption,
-
-        TelegramFile video,
-
-        TelegramFile audio,
-
-        TelegramFile document,
-
-        List<TelegramFile> photo,
+        TelegramFile media,
 
         List<MessageEntity> entities,
 

@@ -11,7 +11,7 @@ public record CallbackQueryEvent(
         Long chatId,
 
         @JsonProperty("message_thread_id")
-        Integer messageThreadId,
+        Long messageThreadId,
 
         @JsonProperty("message_id")
         Integer messageId,
