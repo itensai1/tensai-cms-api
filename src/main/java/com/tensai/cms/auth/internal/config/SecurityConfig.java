@@ -27,6 +27,7 @@ import java.util.List;
 public class SecurityConfig {
     private final SecurityProperties properties;
     private final JwtAuthFilter jwtAuthFilter;
+    private final TelegramAuthFilter telegramAuthFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(
@@ -46,9 +47,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**")
                         .permitAll()
+                        .requestMatchers("/telegram/events").hasRole("TELEGRAM")
                         .requestMatchers("/**")
                         .permitAll()
-                ).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                ).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(telegramAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -90,7 +93,7 @@ public class SecurityConfig {
                 new UrlBasedCorsConfigurationSource();
 
         source.registerCorsConfiguration(
-                "/api/**",
+                "/**",
                 configuration
         );
 
