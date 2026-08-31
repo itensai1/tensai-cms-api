@@ -19,6 +19,9 @@ public record RegisterUserEvent(
         String lastName,
 
         @JsonProperty("telegram_group_id")
-        Long telegramGroupId
+        Long telegramGroupId,
+
+        @JsonProperty("is_admin")
+        boolean isAdmin
 ) {
 }
