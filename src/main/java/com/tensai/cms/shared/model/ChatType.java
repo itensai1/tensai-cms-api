@@ -1,4 +1,4 @@
-package com.tensai.cms.workspace.internal.bot_command;
+package com.tensai.cms.shared.model;
 
 public enum ChatType {
     PRIVATE,

@@ -1,6 +1,6 @@
 package com.tensai.cms.workspace.internal.service;
 
-import com.tensai.cms.shared.dto.PageDto;
+import com.tensai.cms.shared.model.PageDto;
 import com.tensai.cms.workspace.internal.web.dto.BlogDto;
 import com.tensai.cms.workspace.internal.web.dto.BlogInfo;
 import org.springframework.data.domain.Pageable;

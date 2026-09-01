@@ -1,5 +1,6 @@
 package com.tensai.cms.workspace.internal.bot_command;
 
+import com.tensai.cms.shared.model.ChatType;
 import com.tensai.cms.telegram.api.commands.SendMessageCommand;
 import com.tensai.cms.telegram.api.events.CreateMessageEvent;
 import com.tensai.cms.telegram.api.events.UpdateMessageEvent;

@@ -2,7 +2,7 @@ package com.tensai.cms.workspace.internal.service;
 
 import com.tensai.cms.auth.api.UserInfo;
 import com.tensai.cms.auth.api.UserQueryService;
-import com.tensai.cms.shared.dto.PageDto;
+import com.tensai.cms.shared.model.PageDto;
 import com.tensai.cms.shared.exception.CustomException;
 import com.tensai.cms.workspace.internal.entity.Blog;
 import com.tensai.cms.workspace.internal.repository.BlogRepo;

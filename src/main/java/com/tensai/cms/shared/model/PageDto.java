@@ -1,4 +1,4 @@
-package com.tensai.cms.shared.dto;
+package com.tensai.cms.shared.model;
 
 
 import lombok.Builder;
