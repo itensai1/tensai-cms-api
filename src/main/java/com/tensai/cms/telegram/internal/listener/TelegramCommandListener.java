@@ -1,8 +1,9 @@
-package com.tensai.cms.telegram.internal.service;
+package com.tensai.cms.telegram.internal.listener;
 
 import com.tensai.cms.telegram.api.commands.*;
 import com.tensai.cms.telegram.internal.dto.CmsCommand;
 import com.tensai.cms.telegram.internal.dto.CommandType;
+import com.tensai.cms.telegram.internal.service.TelegramClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Component;
