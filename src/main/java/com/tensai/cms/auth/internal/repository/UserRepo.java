@@ -15,6 +15,8 @@ public interface UserRepo extends JpaRepository<User, UUID> {
 
     Optional<User> findByTelegramUserId(Long telegramUserId);
 
+    boolean existsByTelegramUserId(Long telegramUserId);
+
     @Query("SELECT u.id FROM User u WHERE u.telegramGroupId = :telegramGroupId")
     UUID findIdByTelegramGroupId(Long telegramGroupId);
 

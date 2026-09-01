@@ -187,6 +187,6 @@ public class DraftServiceImpl implements DraftService {
     private String getResourceMimeType(Resource resource) {
         return MediaTypeFactory.getMediaType(resource)
                 .map(MediaType::toString)
-                .orElse(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+                .orElse(MediaType.IMAGE_JPEG_VALUE);
     }
 }

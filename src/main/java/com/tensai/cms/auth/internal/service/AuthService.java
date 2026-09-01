@@ -8,4 +8,12 @@ public interface AuthService {
     String generateResetPasswordUrl(Long telegramUserId);
 
     void resetPassword(ResetPasswordRequest request, String token);
+
+    String registerNewTelegramUser(Long telegramUserId, Long telegramGroupId, String username, String firstName, String lastName, boolean isAdmin);
+
+    boolean isExistingUser(Long telegramUserId);
+
+    String registerOldTelegramUser(Long telegramUserId, Long telegramGroupId, String username, String firstName, String lastName, boolean isAdmin);
+
+    void changeAdminStatus(Long telegramUserId, boolean isAdmin);
 }
