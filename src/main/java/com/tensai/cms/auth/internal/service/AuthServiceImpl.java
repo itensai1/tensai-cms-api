@@ -5,6 +5,7 @@ import com.tensai.cms.auth.api.UserQueryService;
 import com.tensai.cms.auth.internal.config.SecurityProperties;
 import com.tensai.cms.auth.internal.entity.TokenPurpose;
 import com.tensai.cms.auth.internal.entity.User;
+import com.tensai.cms.auth.internal.entity.UserRole;
 import com.tensai.cms.auth.internal.repository.UserRepo;
 import com.tensai.cms.auth.internal.web.dto.ResetPasswordRequest;
 import com.tensai.cms.shared.exception.CustomException;
@@ -15,8 +16,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -61,7 +64,15 @@ public class AuthServiceImpl implements AuthService, UserQueryService {
         return url;
     }
 
+    private String generateResetPasswordUrl(String username) {
+        String token = jwtUtil.generateAccessToken(TokenPurpose.RESET_PASSWORD.purposeClaim(), username, 15);
+
+        String url = "%s?token=%s".formatted(properties.resetPasswordPath(), token);
+        return url;
+    }
+
     @Override
+    @Transactional
     public void resetPassword(ResetPasswordRequest request, String token) {
 
         if (!jwtUtil.validateAccessToken(token, TokenPurpose.RESET_PASSWORD)) {
@@ -74,6 +85,60 @@ public class AuthServiceImpl implements AuthService, UserQueryService {
                 .orElseThrow(() -> new CustomException(404, "User not found"));
 
         user.setPassword(passwordEncoder.encode(request.password()));
+        userRepo.save(user);
+    }
+
+    @Override
+    @Transactional
+    public String registerNewTelegramUser(Long telegramUserId, Long telegramGroupId, String username, String firstName, String lastName, boolean isAdmin) {
+
+        if (!isAdmin)
+            throw new CustomException(400, "Bot must be admin");
+        else if (userRepo.existsByTelegramUserId(telegramUserId))
+            throw new CustomException(400, "Telegram user already exists");
+
+        User user = User.builder()
+                .telegramUserId(telegramUserId)
+                .username(username != null ? username : "usr" + telegramUserId)
+                .password(passwordEncoder.encode(UUID.randomUUID().toString()))
+                .role(UserRole.USER).telegramGroupId(telegramGroupId)
+                .firstName(firstName).lastName(lastName).adminBot(true).build();
+        userRepo.save(user);
+
+        return user.getUsername() + " " + generateResetPasswordUrl(user.getUsername());
+    }
+
+    @Override
+    public boolean isExistingUser(Long telegramUserId) {
+        return userRepo.existsByTelegramUserId(telegramUserId);
+    }
+
+    @Override
+    @Transactional
+    public String registerOldTelegramUser(Long telegramUserId, Long telegramGroupId, String username, String firstName, String lastName, boolean isAdmin) {
+        User user = userRepo.findByTelegramUserId(telegramUserId)
+                .orElseThrow(() -> new CustomException(404, "User not found"));
+
+        Long oldGroupId = user.getTelegramGroupId();
+
+        user.setTelegramGroupId(telegramGroupId);
+        user.setAdminBot(isAdmin);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        if (username != null) user.setUsername(username);
+        userRepo.save(user);
+        if (!oldGroupId.equals(telegramGroupId)) {
+            return oldGroupId.toString();
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public void changeAdminStatus(Long telegramUserId, boolean isAdmin) {
+        User user = userRepo.findByTelegramUserId(telegramUserId)
+                .orElseThrow(() -> new CustomException(404, "User not found"));
+        user.setAdminBot(isAdmin);
         userRepo.save(user);
     }
 
