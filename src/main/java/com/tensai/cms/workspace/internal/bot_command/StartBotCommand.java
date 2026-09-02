@@ -1,5 +1,6 @@
 package com.tensai.cms.workspace.internal.bot_command;
 
+import com.tensai.cms.shared.model.ChatType;
 import com.tensai.cms.telegram.api.commands.SendMessageCommand;
 import com.tensai.cms.telegram.api.events.CreateMessageEvent;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class StartBotCommand implements BotCommand {
                         
                         """);
 
-        // TODO: add /settings and tutorial page link
+        // TODO: add tutorial page link
     }
 
     @Override

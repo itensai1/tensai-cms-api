@@ -58,10 +58,7 @@ public class AuthServiceImpl implements AuthService, UserQueryService {
         User user = userRepo.findByTelegramUserId(telegramUserId)
                 .orElseThrow(() -> new CustomException(404, "User not found"));
 
-        String token = jwtUtil.generateAccessToken(TokenPurpose.RESET_PASSWORD.purposeClaim(), user.getUsername(), 15);
-
-        String url = "%s?token=%s".formatted(properties.resetPasswordPath(), token);
-        return url;
+        return generateResetPasswordUrl(user.getUsername());
     }
 
     private String generateResetPasswordUrl(String username) {

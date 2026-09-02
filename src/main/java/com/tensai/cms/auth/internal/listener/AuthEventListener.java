@@ -1,11 +1,14 @@
 package com.tensai.cms.auth.internal.listener;
 
+import com.tensai.cms.auth.internal.callback.AuthCallbackHandler;
 import com.tensai.cms.auth.internal.service.AuthService;
 import com.tensai.cms.telegram.api.commands.Button;
 import com.tensai.cms.telegram.api.commands.ButtonType;
 import com.tensai.cms.telegram.api.commands.Keyboard;
 import com.tensai.cms.telegram.api.commands.SendMessageCommand;
+import com.tensai.cms.telegram.api.events.CallbackQueryEvent;
 import com.tensai.cms.telegram.api.events.RegisterUserEvent;
+import com.tensai.cms.telegram.api.options.OptionRoot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.modulith.events.ApplicationModuleListener;
@@ -18,6 +21,7 @@ import java.util.List;
 public class AuthEventListener {
     private final AuthService authService;
     private final ApplicationEventPublisher publisher;
+    private final AuthCallbackHandler callbackHandler;
 
     @ApplicationModuleListener
     public void on(RegisterUserEvent event) {
@@ -62,5 +66,11 @@ public class AuthEventListener {
         } else if (isExistingUser) { // revoke admin role
             authService.changeAdminStatus(event.telegramUserId(), false);
         }
+    }
+
+    @ApplicationModuleListener
+    void on(CallbackQueryEvent event) {
+        if (!OptionRoot.AUTH.equals(OptionRoot.fromValue(event.data().split(":")[0]))) return;
+        callbackHandler.dispatch(event);
     }
 }

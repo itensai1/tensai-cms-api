@@ -184,6 +184,18 @@ public class DraftServiceImpl implements DraftService {
         draftRepo.save(draft);
     }
 
+    @Override
+    @Transactional
+    public void deleteDraft(Long telegramGroupId, Long topicId) {
+        UUID userId = userQueryService.getUserIdByTelegramGroupId(telegramGroupId);
+        Draft draft = draftRepo.findByUserIdAndTelegramTopicId(userId, topicId)
+                .orElseThrow(() -> new CustomException(404, "No draft found with userId: %s and topicId: %s "
+                        .formatted(userId, topicId)));
+        UUID blogId = draft.getBlog() != null ? draft.getBlog().getId() : null;
+        draftRepo.delete(draft);
+        if (blogId != null) blogRepo.deleteById(blogId);
+    }
+
     private String getResourceMimeType(Resource resource) {
         return MediaTypeFactory.getMediaType(resource)
                 .map(MediaType::toString)

@@ -1,5 +1,6 @@
 package com.tensai.cms.workspace.internal.bot_command;
 
+import com.tensai.cms.shared.model.ChatType;
 import com.tensai.cms.telegram.api.events.CreateMessageEvent;
 import com.tensai.cms.telegram.api.events.UpdateMessageEvent;
 
@@ -18,5 +19,6 @@ public interface BotCommand {
     default void handle(UpdateMessageEvent event, String text) {
     }
 
-    void message(Long chatId, Long messageThreadId, Integer messageId, String message);
+    default void message(Long chatId, Long messageThreadId, Integer messageId, String message) {
+    }
 }
