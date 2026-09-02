@@ -26,7 +26,7 @@ public class OptionHandler {
                 buttons.addLast(new ArrayList<>());
             buttons.getLast().add(btn.getButton());
         }
-        Keyboard keyboard = buttons.getFirst().isEmpty() ? null : new Keyboard(buttons);
+        Keyboard keyboard = buttons.isEmpty() ? null : new Keyboard(buttons);
         publisher.publishEvent(
                 SendMessageCommand.builder()
                         .chatId(chatId).text(">> Settings <<")
