@@ -47,7 +47,7 @@ public class StartBotCommand implements BotCommand {
                         
                         """);
 
-        // TODO: add /settings and tutorial page link
+        // TODO: add tutorial page link
     }
 
     @Override
