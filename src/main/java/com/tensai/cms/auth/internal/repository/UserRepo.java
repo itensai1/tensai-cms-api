@@ -21,4 +21,6 @@ public interface UserRepo extends JpaRepository<User, UUID> {
     UUID findIdByTelegramGroupId(Long telegramGroupId);
 
     List<UserInfoProjection> findAllByIdIn(Set<UUID> ids);
+
+    boolean existsByTelegramGroupIdAndAdminBotTrue(Long telegramGroupId);
 }

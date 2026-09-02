@@ -152,4 +152,9 @@ public class AuthServiceImpl implements AuthService, UserQueryService {
                         u -> new UserInfo(u.getUsername(), u.getFirstName() + (u.getLastName() != null ? " " + u.getLastName() : "")))
                 );
     }
+
+    @Override
+    public boolean isAdminBot(Long telegramGroupId) {
+        return userRepo.existsByTelegramGroupIdAndAdminBotTrue(telegramGroupId);
+    }
 }
