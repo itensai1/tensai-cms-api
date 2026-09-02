@@ -8,4 +8,6 @@ public interface UserQueryService {
     UUID getUserIdByTelegramGroupId(Long telegramGroupId);
 
     Map<UUID, UserInfo> getUserInfoByIds(Set<UUID> userIds);
+
+    boolean isAdminBot(Long telegramGroupId);
 }

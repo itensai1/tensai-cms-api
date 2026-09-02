@@ -1,5 +1,6 @@
 package com.tensai.cms.workspace.internal.callback;
 
+import com.tensai.cms.auth.api.UserQueryService;
 import com.tensai.cms.shared.exception.CustomException;
 import com.tensai.cms.shared.model.ChatType;
 import com.tensai.cms.telegram.api.commands.*;
@@ -17,6 +18,7 @@ import java.util.List;
 public class WorkspaceCallbackHandler {
     private final ApplicationEventPublisher publisher;
     private final DraftService draftService;
+    private final UserQueryService userQueryService;
 
     public void dispatch(CallbackQueryEvent event) {
         String[] data = event.data().split(":");
@@ -52,6 +54,14 @@ public class WorkspaceCallbackHandler {
     }
 
     private void deleteBlogOk(CallbackQueryEvent event) {
+        if (!userQueryService.isAdminBot(event.chatId())) {
+            publisher.publishEvent(
+                    AnswerCallbackCommand.builder()
+                            .callbackQueryId(event.callbackQueryId())
+                            .text("Bot must be admin, promote it first then click button again").build()
+            );
+            return;
+        }
         publisher.publishEvent(
                 DeleteTopicCommand.builder().chatId(event.chatId())
                         .messageThreadId(event.messageThreadId()).build()
@@ -60,6 +70,14 @@ public class WorkspaceCallbackHandler {
     }
 
     private void deleteBlogNo(CallbackQueryEvent event) {
+        if (!userQueryService.isAdminBot(event.chatId())) {
+            publisher.publishEvent(
+                    AnswerCallbackCommand.builder()
+                            .callbackQueryId(event.callbackQueryId())
+                            .text("Bot must be admin, promote it first then click button again").build()
+            );
+            return;
+        }
         publisher.publishEvent(
                 DeleteMessageCommand.builder().chatId(event.chatId()).messageId(event.messageId()).build()
         );
