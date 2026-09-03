@@ -29,6 +29,12 @@ public class Blog {
     @Column(name = "summary", columnDefinition = "text")
     private String summary;
 
+    @Column(name = "comments_count", nullable = false)
+    private int commentsCount = 0;
+
+    @Column(name = "likes_count", nullable = false)
+    private int likesCount = 0;
+
     @OneToMany(
             mappedBy = "blog",
             cascade = CascadeType.ALL,
@@ -37,6 +43,23 @@ public class Blog {
     )
     @OrderBy("position ASC")
     private Set<BlogBlock> blocks = new HashSet<>();
+
+    @OneToMany(
+            mappedBy = "blog",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    @OrderBy("createdAt ASC")
+    private Set<Comment> comments = new HashSet<>();
+
+    @OneToMany(
+            mappedBy = "blog",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private Set<Like> likes = new HashSet<>();
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -63,5 +86,21 @@ public class Blog {
     public void removeBlock(BlogBlock block) {
         blocks.remove(block);
         block.setBlog(null);
+    }
+
+    public void incrementLikes() {
+        this.likesCount++;
+    }
+
+    public void decrementLikes() {
+        this.likesCount = Math.max(0, this.likesCount - 1);
+    }
+
+    public void incrementComments() {
+        this.commentsCount++;
+    }
+
+    public void decrementComments() {
+        this.commentsCount = Math.max(0, this.commentsCount - 1);
     }
 }
