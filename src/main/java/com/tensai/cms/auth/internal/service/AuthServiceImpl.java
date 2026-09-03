@@ -3,6 +3,7 @@ package com.tensai.cms.auth.internal.service;
 import com.tensai.cms.auth.api.UserInfo;
 import com.tensai.cms.auth.api.UserQueryService;
 import com.tensai.cms.auth.internal.config.SecurityProperties;
+import com.tensai.cms.auth.internal.entity.CmsUserDetails;
 import com.tensai.cms.auth.internal.entity.TokenPurpose;
 import com.tensai.cms.auth.internal.entity.User;
 import com.tensai.cms.auth.internal.entity.UserRole;
@@ -10,9 +11,11 @@ import com.tensai.cms.auth.internal.repository.UserRepo;
 import com.tensai.cms.auth.internal.web.dto.ResetPasswordRequest;
 import com.tensai.cms.shared.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -149,12 +152,34 @@ public class AuthServiceImpl implements AuthService, UserQueryService {
         if (userIds == null) return Map.of();
         return userRepo.findAllByIdIn(userIds).stream()
                 .collect(Collectors.toMap(u -> u.getId(),
-                        u -> new UserInfo(u.getUsername(), u.getFirstName() + (u.getLastName() != null ? " " + u.getLastName() : "")))
+                        u -> new UserInfo(u.getId(), u.getUsername(), u.getFirstName(), u.getLastName()))
                 );
     }
 
     @Override
     public boolean isAdminBot(Long telegramGroupId) {
         return userRepo.existsByTelegramGroupIdAndAdminBotTrue(telegramGroupId);
+    }
+
+    @Override
+    public UserInfo getCurrentUserInfo() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()) return null;
+        if (auth.getPrincipal() instanceof CmsUserDetails userDetails) {
+            var user = userDetails.getUser();
+            if (user == null) return null;
+            return new UserInfo(
+                    user.getId(), userDetails.getUsername(),
+                    user.getFirstName(), user.getLastName()
+            );
+        }
+        return null;
+    }
+
+    @Override
+    public UUID getCurrentUserId() {
+        UserInfo info = getCurrentUserInfo();
+        if (info == null) return null;
+        return info.id();
     }
 }
