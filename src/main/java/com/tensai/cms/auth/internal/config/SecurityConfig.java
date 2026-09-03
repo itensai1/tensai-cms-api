@@ -50,8 +50,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**")
                         .permitAll()
                         .requestMatchers("/telegram/events").hasRole("TELEGRAM")
-                        .requestMatchers("/**")
-                        .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/blogs/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .anyRequest().hasAnyRole("USER", "ADMIN")
                 ).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(telegramAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
