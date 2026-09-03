@@ -13,4 +13,8 @@ public interface BlogProjection {
     Instant getUpdatedAt();
 
     UUID getUserId();
+
+    int getLikesCount();
+
+    int getCommentsCount();
 }

@@ -17,6 +17,14 @@ public record BlogInfo(
         UUID userId,
         String username,
         @JsonProperty("publisher_name")
-        String publisherName
+        String publisherName,
+        @JsonProperty("likes_count")
+        int likesCount,
+        @JsonProperty("comments_count")
+        int commentsCount,
+        @JsonProperty("is_liked")
+        boolean isLiked,
+        @JsonProperty("is_mine")
+        boolean isMine
 ) {
 }
