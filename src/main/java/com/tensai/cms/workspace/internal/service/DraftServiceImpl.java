@@ -6,9 +6,7 @@ import com.tensai.cms.storage.api.StorageService;
 import com.tensai.cms.telegram.api.TelegramService;
 import com.tensai.cms.telegram.api.events.TelegramFile;
 import com.tensai.cms.workspace.internal.entity.*;
-import com.tensai.cms.workspace.internal.repository.BlogBlockRepo;
-import com.tensai.cms.workspace.internal.repository.BlogRepo;
-import com.tensai.cms.workspace.internal.repository.DraftRepo;
+import com.tensai.cms.workspace.internal.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -28,6 +26,8 @@ public class DraftServiceImpl implements DraftService {
     private final TelegramService telegramService;
     private final BlogRepo blogRepo;
     private final BlogBlockRepo blogBlockRepo;
+    private final CommentRepo commentRepo;
+    private final LikeRepo likeRepo;
 
     @Override
     @Transactional
@@ -193,7 +193,11 @@ public class DraftServiceImpl implements DraftService {
                         .formatted(userId, topicId)));
         UUID blogId = draft.getBlog() != null ? draft.getBlog().getId() : null;
         draftRepo.delete(draft);
-        if (blogId != null) blogRepo.deleteById(blogId);
+        if (blogId != null) {
+            likeRepo.deleteAllByBlogId(blogId);
+            commentRepo.deleteAllByBlogId(blogId);
+            blogRepo.deleteById(blogId);
+        }
     }
 
     private String getResourceMimeType(Resource resource) {
