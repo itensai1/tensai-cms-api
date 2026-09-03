@@ -6,6 +6,7 @@ import com.tensai.cms.shared.model.PageDto;
 import com.tensai.cms.shared.exception.CustomException;
 import com.tensai.cms.workspace.internal.entity.Blog;
 import com.tensai.cms.workspace.internal.repository.BlogRepo;
+import com.tensai.cms.workspace.internal.repository.LikeRepo;
 import com.tensai.cms.workspace.internal.repository.projection.BlogProjection;
 import com.tensai.cms.workspace.internal.web.dto.BlogBlockDto;
 import com.tensai.cms.workspace.internal.web.dto.BlogDto;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 public class BlogServiceImpl implements BlogService {
     private final BlogRepo blogRepo;
     private final UserQueryService userQueryService;
+    private final LikeRepo likeRepo;
 
     @Override
     @Transactional(readOnly = true)
@@ -49,13 +51,23 @@ public class BlogServiceImpl implements BlogService {
 
         Map<UUID, UserInfo> userInfoMap = userQueryService.getUserInfoByIds(userIds);
 
+        Set<UUID> blogIds = blogs.getContent().stream()
+                .map(BlogProjection::getId).collect(Collectors.toSet());
+
+        UUID currentUserId = userQueryService.getCurrentUserId();
+
+        Set<UUID> likedBlogs = currentUserId == null ? null : likeRepo.findLikedBlogIdsByUserId(blogIds, currentUserId);
+
         List<BlogInfo> items = blogs.getContent().stream()
                 .map(b -> BlogInfo.builder()
                         .id(b.getId()).title(b.getTitle())
                         .summary(b.getSummary()).lastUpdated(b.getUpdatedAt())
                         .userId(b.getUserId())
                         .username(userInfoMap.get(b.getUserId()).username())
-                        .publisherName(userInfoMap.get(b.getUserId()).fullName()).build()
+                        .publisherName(userInfoMap.get(b.getUserId()).fullName())
+                        .likesCount(b.getLikesCount()).commentsCount(b.getCommentsCount())
+                        .isLiked(likedBlogs != null && likedBlogs.contains(b.getId()))
+                        .isMine(b.getUserId().equals(currentUserId)).build()
                 ).toList();
 
         return PageDto.<BlogInfo>builder()
@@ -84,12 +96,19 @@ public class BlogServiceImpl implements BlogService {
                         .build()
                 ).toList();
 
+        UUID currentUserId = userQueryService.getCurrentUserId();
+        boolean isLikedByCurrentUser = currentUserId != null && likeRepo.existsByBlogIdAndUserId(blog.getId(), currentUserId);
+
         return BlogDto.builder()
                 .id(blog.getId()).title(blog.getTitle())
                 .summary(blog.getSummary()).lastUpdated(blog.getUpdatedAt())
                 .userId(blog.getUserId()).blocks(blocks)
                 .username(userInfo.username())
-                .publisherName(userInfo.fullName()).build();
+                .publisherName(userInfo.fullName())
+                .likesCount(blog.getLikesCount())
+                .commentsCount(blog.getCommentsCount())
+                .isLiked(isLikedByCurrentUser)
+                .isMine(blog.getUserId().equals(currentUserId)).build();
     }
 
 }
