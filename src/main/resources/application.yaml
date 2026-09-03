@@ -18,3 +18,11 @@ spring:
     events:
       completion-mode: update
       republish-outstanding-events-on-restart: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs # JSON documentation endpoint
+    version: openapi_3_1 # Enforces the OpenAPI 3.1 standard
+  swagger-ui:
+    default-models-expand-depth: -1
+    path: /swagger-ui.html # Web UI landing page
