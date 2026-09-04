@@ -4,6 +4,7 @@ import com.tensai.cms.shared.model.ChatType;
 import com.tensai.cms.telegram.api.commands.SendMessageCommand;
 import com.tensai.cms.telegram.api.events.CreateMessageEvent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class StartBotCommand implements BotCommand {
     private final ApplicationEventPublisher publisher;
+    @Value("${security.base-url}")
+    private String baseUrl;
 
     @Override
     public String getCommand() {
@@ -42,12 +45,10 @@ public class StartBotCommand implements BotCommand {
                         
                         > to manage your Blog send /settings
                         
-                        > to know how to create Blog visit
-                            - url: link-to-tutorial
+                        > User Setup Guide:
+                            - %s/toturial.html
                         
-                        """);
-
-        // TODO: add tutorial page link
+                        """.formatted(baseUrl));
     }
 
     @Override

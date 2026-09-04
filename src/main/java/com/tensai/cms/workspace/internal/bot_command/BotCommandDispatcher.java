@@ -49,9 +49,10 @@ public class BotCommandDispatcher {
     }
 
     private ParsedCommand parse(List<MessageEntity> entities, String text) {
+        int atSign = text.indexOf('@');
         return entities.stream().filter(entity -> entity.type().equals("bot_command"))
                 .findFirst().map(e -> new ParsedCommand(
-                        text.substring(e.offset(), e.offset() + e.length()),
+                        text.substring(e.offset(), atSign < 0 ? e.offset() + e.length() : atSign),
                         text.substring(e.offset() + e.length()).strip()
                 )).orElse(null);
     }
