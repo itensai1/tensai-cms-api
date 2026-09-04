@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tensai CMS - User Guide</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Tensai CMS</h1>
+        <p>Publish a full-featured blog directly from your Telegram Topics.</p>
+    </header>
+
+    <main>
+        <h2>User Setup Guide</h2>
+        <section>
+            <h2>Phase 1: The Initial Setup</h2>
+            <p>Follow these steps to connect your Telegram group to the CMS. You only need to do this once.</p>
+
+            <div class="step-box">
+                <ol>
+                    <li><strong>Create an empty Telegram Group.</strong></li>
+                    <li><strong>Enable Topics:</strong> Go to the group's settings and toggle on <strong>Topics</strong>
+                        (this is required to separate your different blog posts).
+                    </li>
+                    <li><strong>Add the Bot:</strong> Add <a href="https://t.me/tensai_cms_bot" target="_blank">@tensai_cms_bot</a>
+                        to your group.
+                    </li>
+                    <li><strong>Grant Admin Permissions:</strong> Promote the bot to an Admin. <strong>Crucial:</strong>
+                        Ensure the bot has the permission to <strong>Delete Messages</strong>.
+                    </li>
+                </ol>
+            </div>
+
+            <p>The first time you add <a href="https://t.me/tensai_cms_bot" target="_blank">@tensai_cms_bot</a> to a
+                group as an admin it will create you an account with your telegram username <em>(if not set the bot will
+                    generate you a username)</em> and send you a reset password URL, the next times you add <a
+                        href="https://t.me/tensai_cms_bot" target="_blank">@tensai_cms_bot</a> to different groups it'll
+                manage only the new group without deleting old blogs.</p>
+
+            <div class="callout">
+                <p><a href="https://t.me/tensai_cms_bot" target="_blank">@tensai_cms_bot</a> currently can only manage
+                    one group for each user.</p>
+            </div>
+
+            <div class="callout">
+                <strong>Collaborative working:</strong>
+                <p><a href="https://t.me/tensai_cms_bot" target="_blank">@tensai_cms_bot</a> currently only stores the
+                    user who promoted it to an admin as the owner of the blog and doesn't track if different users
+                    contributed to the blog.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Phase 2: Creating & Publishing a Blog</h2>
+
+            <h3>1. Start a New Draft</h3>
+            <p>To create a new blog post, simply <strong>create a new topic</strong> in your group.</p>
+            <ul>
+                <li>The <strong>Topic Name</strong> becomes your <strong>Blog Title</strong>.</li>
+                <li>Want to change the title later? Just rename the topic in Telegram, and the blog title will update
+                    after the next publish!
+                </li>
+            </ul>
+
+            <h3>2. Add Content</h3>
+            <p>Write naturally in the topic. The CMS supports a rich variety of media:</p>
+            <ul>
+                <li>Texts</li>
+                <li>Images and Videos</li>
+                <li>Audio and Voice Notes</li>
+                <li>Documents and Files</li>
+            </ul>
+
+            <div class="callout">
+                <strong>💡 Pro-Tip for Images</strong>
+                To preserve the highest quality, send your images as a <strong>File</strong> rather than a standard
+                photo upload. Telegram compresses standard photos, but files remain untouched.
+            </div>
+
+            <h3>3. Set a Summary</h3>
+            <p>Give your readers a preview of your article.</p>
+            <ul>
+                <li>Send <code>/setsummary &lt;your summary text&gt;</code> to define the excerpt.</li>
+                <li><em>Example:</em> <code>/setsummary A deep dive into Java 25 features.</code></li>
+                <li>If you make a mistake, use <code>/clearsummary</code> to remove it.</li>
+            </ul>
+
+            <h3>4. Publish</h3>
+            <p>When your draft is ready, simply send <code>/publish</code> in the topic. Your thread is instantly
+                converted into a live, structured article!</p>
+        </section>
+
+        <section>
+            <h2>Phase 3: Deleting & Editing</h2>
+
+            <h3>Deleting Specific Messages</h3>
+            <p>If you make a typo or want to remove a message, you <strong>must</strong> use the bot to delete it from
+                the CMS.</p>
+            <ul>
+                <li>Reply directly to the message you want to remove with <code>/delete</code> and hit send.</li>
+            </ul>
+
+            <div class="callout warning">
+                <strong>⚠️ WARNING</strong>
+                Do not use Telegram's native "Delete message" option. If you delete a message natively, the bot won't
+                know it happened, and the text will remain in your published blog. Always use <code>/delete</code>!
+            </div>
+
+            <h3>Editing Specific Messages</h3>
+            <p>If you make a typo or want to change a message (including media), you can use Telegram's native "Edit
+                message" option.</p>
+
+            <h3>Deleting an Entire Blog</h3>
+            <p>To delete a blog entirely (which removes the published version, the draft, and the Telegram topic):</p>
+            <ol>
+                <li>Send <code>/settings</code> in the topic.</li>
+                <li>Click the <strong>Delete Blog</strong> inline button.</li>
+                <li>Click <em>"Are you sure?"</em> to confirm.</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>Phase 4: Managing your Account</h2>
+
+            <h3>Reset account password</h3>
+            <p>To reset your account password:</p>
+            <ol>
+                <li>Send <code>/settings</code> in your private chat with <a href="https://t.me/tensai_cms_bot"
+                                                                             target="_blank">@tensai_cms_bot</a>.
+                </li>
+                <li>Click the <strong>Reset Password</strong> inline button.</li>
+                <li>It will generate a secure password reset link valid for 15 minutes.</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>Command Reference</h2>
+
+            <h3>Commands Inside a Topic (Managing a Blog)</h3>
+            <ul class="command-list">
+                <li>
+                    <span class="cmd">/publish</span>
+                    Publishes the current topic as a live blog.
+                    <span class="usage">Usage: Send <code>/publish</code> in the topic.</span>
+                </li>
+                <li>
+                    <span class="cmd">/setsummary &lt;text&gt;</span>
+                    Sets the preview summary for this blog.
+                    <span class="usage">Usage: <code>/setsummary A guide to the new features in Java 25.</code></span>
+                </li>
+                <li>
+                    <span class="cmd">/clearsummary</span>
+                    Clears the current summary of this blog.
+                    <span class="usage">Usage: Send <code>/clearsummary</code> in the topic.</span>
+                </li>
+                <li>
+                    <span class="cmd">/delete</span>
+                    Deletes a specified message from the CMS.
+                    <span class="usage">Usage: <strong>Reply</strong> to the message you want to delete with <code>/delete</code>.</span>
+                </li>
+                <li>
+                    <span class="cmd">/settings</span>
+                    Shows available settings for the topic (e.g., Delete Blog).
+                    <span class="usage">Usage: Send <code>/settings</code> in the topic.</span>
+                </li>
+                <li>
+                    <span class="cmd">/help</span>
+                    Shows a list of available topic commands.
+                    <span class="usage">Usage: Send <code>/help</code> in the topic.</span>
+                </li>
+            </ul>
+
+            <h3>Commands in Private Chat (Account Management)</h3>
+            <p>Send these directly in a private message to <a href="https://t.me/tensai_cms_bot" target="_blank">@tensai_cms_bot</a>:
+            </p>
+            <ul class="command-list">
+                <li>
+                    <span class="cmd">/start</span>
+                    Starts a conversation and sends the link to this tutorial.
+                    <span class="usage">Usage: Send <code>/start</code></span>
+                </li>
+                <li>
+                    <span class="cmd">/settings</span>
+                    Shows general account settings.
+                    <span class="usage">Usage: Send <code>/settings</code></span>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <a href="https://github.com/itensai1" target="_blank" rel="noopener noreferrer" class="github-link">
+            <!-- Simple GitHub SVG Logo -->
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+            </svg>
+            <span>github.com/itensai1</span>
+        </a>
+    </footer>
+</div>
+
+</body>
+</html>
