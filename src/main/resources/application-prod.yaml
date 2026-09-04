@@ -1,0 +1,59 @@
+spring:
+  # Database & Hikari Connection Pool Settings
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    hikari:
+      maximum-pool-size: ${HIKARI_MAX_POOL_SIZE:20}
+      minimum-idle: ${HIKARI_MIN_IDLE:5}
+      idle-timeout: 300000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+
+  # JPA & Hibernate Settings
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+  # Flyway Safety Guard
+  flyway:
+    clean-disabled: true # Prevents accidental DB wiping in production
+
+# Security & Application Configuration
+security:
+  allowed-origins: ${ALLOWED_ORIGINS} # e.g., "https://tensai.com,http://localhost:3000"
+  jwt-secret: ${JWT_SECRET}
+  base-url: ${APP_BASE_URL}
+  reset-password-path: "${RESET_PASSWORD_PATH}"
+
+# External Storage Configuration
+storage:
+  s3:
+    endpoint: ${S3_ENDPOINT} # e.g., AWS S3 or hosted MinIO endpoint
+    access-key: ${S3_ACCESS_KEY}
+    secret-key: ${S3_SECRET_KEY}
+    region: ${S3_REGION:us-east-1}
+    bucket: ${S3_BUCKET_NAME}
+
+# Integration Services (Telegram Gateway)
+telegram:
+  header: "X-Internal-Secret"
+  secret: ${TELEGRAM_GATEWAY_API_SECRET}
+  url: ${TELEGRAM_GATEWAY_API_URL}
+  endpoints:
+    post-command: "/internal/command"
+    get-file: "/internal/file"
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.tensai.cms: INFO
+    org.hibernate.SQL: ERROR
+    org.springframework.security: WARN
