@@ -49,9 +49,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**")
                         .permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
+                                "/", "/*.html", "/css/**"
+                        ).permitAll()
                         .requestMatchers("/telegram/events").hasRole("TELEGRAM")
                         .requestMatchers(HttpMethod.GET, "/api/v1/blogs/**").permitAll()
-                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/file/**").permitAll()
                         .anyRequest().hasAnyRole("USER", "ADMIN")
                 ).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(telegramAuthFilter, UsernamePasswordAuthenticationFilter.class);
